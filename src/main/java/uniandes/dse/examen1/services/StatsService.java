@@ -1,9 +1,12 @@
 package uniandes.dse.examen1.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import uniandes.dse.examen1.entities.StudentEntity;
 import uniandes.dse.examen1.repositories.CourseRepository;
 import uniandes.dse.examen1.repositories.StudentRepository;
 import uniandes.dse.examen1.repositories.RecordRepository;
@@ -13,20 +16,24 @@ import uniandes.dse.examen1.repositories.RecordRepository;
 public class StatsService {
 
     @Autowired
-    StudentRepository estudianteRepository;
+    StudentRepository studentRepository;
 
     @Autowired
-    CourseRepository cursoRepository;
+    CourseRepository courseRepository;
 
     @Autowired
-    RecordRepository inscripcionRepository;
+    RecordRepository recordRepository;
 
     public Double calculateStudentAverage(String login) {
-        // TODO
+        Optional<StudentEntity> student = studentRepository.findByLogin(login);
+        
+
+        return (double) -1;
     }
 
     public Double calculateCourseAverage(String courseCode) {
-        r// TODO
+        
+        return (double)-1;
     }
 
 }
