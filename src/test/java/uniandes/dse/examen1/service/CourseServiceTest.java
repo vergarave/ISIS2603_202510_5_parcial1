@@ -52,6 +52,18 @@ public class CourseServiceTest {
 
     @Test
     void testCreateRepeatedCourse() {
-        // TODO
+        CourseEntity firstEntity = factory.manufacturePojo(CourseEntity.class);
+        String code = firstEntity.getCourseCode();
+
+        CourseEntity repeatedEntity = new CourseEntity();
+        repeatedEntity.setCourseCode(code);
+        repeatedEntity.setName("repeated name");
+
+        try {
+            courseService.createCourse(firstEntity);
+            courseService.createCourse(repeatedEntity);
+            fail("An exception must be thrown");
+        } catch (Exception e) {
+        }
     }
 }

@@ -1,6 +1,9 @@
 package uniandes.dse.examen1.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
@@ -65,10 +68,13 @@ public class RecordServiceTest {
 
     /**
      * Tests the normal creation of a record for a student in a course
-     */
-    @Test
-    void testCreateRecord() {
-        // TODO
+          * @throws InvalidRecordException 
+          */
+         @Test
+         void testCreateRecord() throws InvalidRecordException {
+        RecordEntity record = recordService.createRecord(login, courseCode, 4.0, "4");
+        assertNotNull(record);
+        assertEquals(4.0, record.getFinalGrade(), 0.01);
     }
 
     /**
@@ -76,7 +82,9 @@ public class RecordServiceTest {
      */
     @Test
     void testCreateRecordMissingStudent() {
-        // TODO
+        assertThrows(InvalidRecordException.class, () -> {
+            recordService.createRecord("login random", courseCode, 3.5, "3");
+        });
     }
 
     /**
@@ -84,7 +92,9 @@ public class RecordServiceTest {
      */
     @Test
     void testCreateInscripcionMissingCourse() {
-        // TODO
+        assertThrows(InvalidRecordException.class, () -> {
+            recordService.createRecord(login, "codigo random", 3.5, "8");
+        });
     }
 
     /**
@@ -92,24 +102,39 @@ public class RecordServiceTest {
      */
     @Test
     void testCreateInscripcionWrongGrade() {
-        // TODO
+        assertThrows(InvalidRecordException.class, () -> {
+            recordService.createRecord(login, courseCode, 1.3, "1");
+        });
+
+        assertThrows(InvalidRecordException.class, () -> {
+            recordService.createRecord(login, courseCode, 6.0, "1");
+        });
     }
 
     /**
      * Tests the creation of a record when the student already has a passing grade
      * for the course
-     */
-    @Test
-    void testCreateInscripcionRepetida1() {
-        // TODO
+          * @throws InvalidRecordException 
+          */
+        @Test
+        void testCreateInscripcionRepetida1() throws InvalidRecordException {
+        recordService.createRecord(login, courseCode, 3.5, "2");
+
+        assertThrows(InvalidRecordException.class, () -> {
+            recordService.createRecord(login, courseCode, 4.0, "2");
+        });
     }
 
     /**
      * Tests the creation of a record when the student already has a record for the
      * course, but he has not passed the course yet.
-     */
-    @Test
-    void testCreateInscripcionRepetida2() {
-        // TODO
+          * @throws InvalidRecordException 
+          */
+        @Test
+        void testCreateInscripcionRepetida2() throws InvalidRecordException {
+        recordService.createRecord(login, courseCode, 2.5, "4");
+        assertDoesNotThrow(() -> {
+            recordService.createRecord(login, courseCode, 2.8, "4");
+        });
     }
 }
